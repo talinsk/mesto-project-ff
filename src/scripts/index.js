@@ -22,6 +22,9 @@ const newPlaceForm = document.querySelector(".popup__form[name='new-place']");
 const cardNameInput = document.querySelector(".popup__input_type_card-name");
 const typeUrlInput = document.querySelector(".popup__input_type_url");
 
+const imageModalImageElement = imageModal.querySelector('.popup__image');
+const imageModalCaptionElement = imageModal.querySelector('.popup__caption');
+
 function handleEditProfileFormSubmit(evt) {
   evt.preventDefault(); 
   profileTitleElement.textContent = nameInput.value;
@@ -41,12 +44,10 @@ function handleNewPlaceFormSubmit(evt) {
   newPlaceForm.reset();
 }
 
-function openImage(card) {
-  const imageElement = imageModal.querySelector('.popup__image');
-  const captionElement = imageModal.querySelector('.popup__caption');
-  imageElement.src = card.link;
-  imageElement.alt = card.name;
-  captionElement.textContent = card.name;
+function openImage(card) {  
+  imageModalImageElement.src = card.link;
+  imageModalImageElement.alt = card.name;
+  imageModalCaptionElement.textContent = card.name;
   openModal(imageModal);
 }
 

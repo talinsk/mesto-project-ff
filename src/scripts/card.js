@@ -29,9 +29,5 @@ export function deleteCard(cardElement) {
 }
 
 export function toggleLike(likeButton) {
-  if (likeButton.classList.contains(likeActiveClass)) {
-    likeButton.classList.remove(likeActiveClass);
-  } else {
-    likeButton.classList.add(likeActiveClass);
-  }
+  likeButton.classList.toggle(likeActiveClass);
 }
