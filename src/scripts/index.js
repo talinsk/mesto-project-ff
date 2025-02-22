@@ -11,8 +11,6 @@ const newCardButton = document.querySelector(".profile__add-button");
 const profileModal = document.querySelector(".popup_type_edit");
 const newCardModal = document.querySelector(".popup_type_new-card");
 const imageModal = document.querySelector(".popup_type_image");
-const modalCloseBtns = document.querySelectorAll(".popup__close");
-const modalElements = document.querySelectorAll('.popup');
 
 const editProfileForm = document.querySelector(".popup__form[name='edit-profile']");
 const profileTitleElement = document.querySelector(".profile__title");
@@ -24,20 +22,11 @@ const newPlaceForm = document.querySelector(".popup__form[name='new-place']");
 const cardNameInput = document.querySelector(".popup__input_type_card-name");
 const typeUrlInput = document.querySelector(".popup__input_type_url");
 
-function closeModalByEsc(e) {
-  if (e.key === "Escape") {
-    const modal = document.querySelector(".popup.popup_is-opened");
-    if (modal) {
-      closeModal(modal);
-    }
-  }
-}
-
 function handleEditProfileFormSubmit(evt) {
   evt.preventDefault(); 
   profileTitleElement.textContent = nameInput.value;
   profileDescriptionElement.textContent = jobInput.value;
-  closeModal(profileModal, closeModalByEsc);
+  closeModal(profileModal);
 }
 
 function handleNewPlaceFormSubmit(evt) {
@@ -48,7 +37,8 @@ function handleNewPlaceFormSubmit(evt) {
   };
   const el = createCard(listItemTemplate, card, deleteCard, toggleLike, openImage);
   initialCardsList.prepend(el);
-  closeModal(newCardModal, closeModalByEsc);
+  closeModal(newCardModal);
+  newPlaceForm.reset();
 }
 
 function openImage(card) {
@@ -57,7 +47,7 @@ function openImage(card) {
   imageElement.src = card.link;
   imageElement.alt = card.name;
   captionElement.textContent = card.name;
-  openModal(imageModal, closeModalByEsc);
+  openModal(imageModal);
 }
 
 // create cards
@@ -69,29 +59,13 @@ initialCards.forEach(card => {
 profileEditButton.addEventListener('click', function () {
   nameInput.value = profileTitleElement.textContent;
   jobInput.value = profileDescriptionElement.textContent;
-  openModal(profileModal, closeModalByEsc);
+  openModal(profileModal);
 });
 
 newCardButton.addEventListener('click', function () {
-  // to clear old input values if the modal was closed using "close" button earlier
+  // to clear old input values if the modal was closed using "close" button or overlay earlier
   newPlaceForm.reset();
-  openModal(newCardModal, closeModalByEsc);
-});
-
-// add listeners for modals when close button is clicked
-modalCloseBtns.forEach(btn => {
-  btn.addEventListener('click', function () {
-    closeModal(btn.closest('.popup'), closeModalByEsc);
-  })  
-});
-
-// add listeners for modals when overlay is clicked
-modalElements.forEach(modal => {
-  modal.addEventListener('click', (e) => {
-    if (e.target === modal) {
-      closeModal(modal, closeModalByEsc);
-    }
-  })
+  openModal(newCardModal);
 });
 
 // forms submit listeners
