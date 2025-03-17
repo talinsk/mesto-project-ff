@@ -11,7 +11,7 @@
   border-radius: 2px;
   border: none;
   transition: visibility 0s, background 0.3s;
-  margin-top: 48px;
+  margin-top: 35px;
 }
 
 .popup__button:hover {
@@ -19,14 +19,14 @@
   cursor: pointer;
 }
 
-.popup__button_inactive {
+.popup__button_disabled {
   background-color: transparent;
   border: solid 1px #000;
   opacity: 20%;
   color: #000;
 }
 
-.popup__button_inactive:hover {
+.popup__button_disabled:hover {
   background-color: transparent;
   cursor: default;
 }

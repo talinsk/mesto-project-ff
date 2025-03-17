@@ -26,6 +26,14 @@ const typeUrlInput = document.querySelector(".popup__input_type_url");
 const imageModalImageElement = imageModal.querySelector('.popup__image');
 const imageModalCaptionElement = imageModal.querySelector('.popup__caption');
 
+const validationConfig = {
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button',
+  inactiveButtonClass: 'popup__button_disabled',
+  inputErrorClass: 'popup__input_type_error'
+};
+
 function handleEditProfileFormSubmit(evt) {
   evt.preventDefault(); 
   profileTitleElement.textContent = nameInput.value;
@@ -61,14 +69,14 @@ initialCards.forEach(card => {
 profileEditButton.addEventListener('click', function () {
   nameInput.value = profileTitleElement.textContent;
   jobInput.value = profileDescriptionElement.textContent;
-  clearValidation(profileModal);
+  clearValidation(profileModal, validationConfig);
   openModal(profileModal);
 });
 
 newCardButton.addEventListener('click', function () {
   // to clear old input values if the modal was closed using "close" button or overlay earlier
   newPlaceForm.reset();
-  clearValidation(newCardModal);
+  clearValidation(newCardModal, validationConfig);
   openModal(newCardModal);
 });
 
@@ -76,4 +84,4 @@ newCardButton.addEventListener('click', function () {
 editProfileForm.addEventListener('submit', handleEditProfileFormSubmit);
 newPlaceForm.addEventListener('submit', handleNewPlaceFormSubmit);
 
-enableFormValidation();
+enableFormValidation(validationConfig);
