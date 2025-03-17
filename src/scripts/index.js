@@ -1,7 +1,8 @@
 import '../pages/index.css';
 import { initialCards } from './cards';
 import { createCard, deleteCard, toggleLike } from './card';
-import { openModal, closeModal } from './modal'
+import { openModal, closeModal } from './modal';
+import { enableFormValidation, clearValidation } from './validation';
 
 const cardTemplate = document.querySelector("#card-template").content;
 const listItemTemplate = cardTemplate.querySelector(".card");
@@ -60,6 +61,7 @@ initialCards.forEach(card => {
 profileEditButton.addEventListener('click', function () {
   nameInput.value = profileTitleElement.textContent;
   jobInput.value = profileDescriptionElement.textContent;
+  clearValidation(profileModal);
   openModal(profileModal);
 });
 
@@ -72,3 +74,5 @@ newCardButton.addEventListener('click', function () {
 // forms submit listeners
 editProfileForm.addEventListener('submit', handleEditProfileFormSubmit);
 newPlaceForm.addEventListener('submit', handleNewPlaceFormSubmit);
+
+enableFormValidation();
