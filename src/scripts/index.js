@@ -68,6 +68,7 @@ profileEditButton.addEventListener('click', function () {
 newCardButton.addEventListener('click', function () {
   // to clear old input values if the modal was closed using "close" button or overlay earlier
   newPlaceForm.reset();
+  clearValidation(newCardModal);
   openModal(newCardModal);
 });
 
