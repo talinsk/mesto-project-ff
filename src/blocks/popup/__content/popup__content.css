@@ -13,6 +13,10 @@
   min-height: 0;
 }
 
+.popup_confirmation .popup__content {
+  min-height: 0;
+}
+
 @media screen and (max-width: 568px) {
   .popup__content {
     width: 100%;

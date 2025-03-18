@@ -30,6 +30,7 @@ const imageModal = document.querySelector(".popup_type_image");
 const errorModal = document.querySelector(".popup_error");
 const profileEditImage = document.querySelector(".profile__image");
 const newAvatarModal = document.querySelector(".popup_type_new-avatar");
+const confirmationModal = document.querySelector(".popup_confirmation");
 
 const profileTitleElement = document.querySelector(".profile__title");
 const profileDescriptionElement = document.querySelector(".profile__description");
@@ -51,7 +52,14 @@ const newAvatarForm = newAvatarModal.querySelector(".popup__form");
 const avatarUrlInput = newAvatarForm.querySelector(".popup__input_type_url");
 const newAvatarFormSubmitButton = newAvatarForm.querySelector(".popup__button");
 
+const confirmationButton = confirmationModal.querySelector(".popup__button");
+
 const errorCaptionElement = errorModal.querySelector(".popup__text");
+
+const deleteCardContext = {
+  cardId: null,
+  cardElement: null
+};
 
 const validationConfig = {
   formSelector: ".popup__form",
@@ -96,7 +104,7 @@ function handleNewPlaceFormSubmit(evt) {
         listItemTemplate,
         cardInfo,
         cardInfo.owner._id,
-        deleteCard,
+        confirmDeleteCard,
         likeCard,
         openImage
       );
@@ -133,7 +141,7 @@ function handleNewAvatarFormSubmit(evt) {
 }
 
 function setNormalButtonText(buttonElement) {
-  buttonElement.value = "Сохранить";
+  buttonElement.textContent = "Сохранить";
 }
 
 function setButtonTextLoading(buttonElement) {
@@ -167,27 +175,40 @@ profileEditButton.addEventListener("click", function () {
 });
 
 newCardButton.addEventListener("click", function () {
-  // to clear old input values if the modal was closed using "close" button or overlay earlier
   newPlaceForm.reset();
   clearValidation(newCardModal, validationConfig);
   openModal(newCardModal);
 });
 
 profileEditImage.addEventListener("click", function () {
-  // to clear old input values if the modal was closed using "close" button or overlay earlier
   newAvatarForm.reset();
   clearValidation(newAvatarModal, validationConfig);
   openModal(newAvatarModal);
 });
 
-function deleteCard(id, cardElement) {
-  deleteCardFromServer(id)
+confirmationButton.addEventListener("click", function () {
+  deleteCard();
+  closeModal(confirmationModal);
+});
+
+function deleteCard() {  
+  if (!deleteCardContext.cardId) {
+    return;
+  }
+
+  deleteCardFromServer(deleteCardContext.cardId)
     .then(() => {
-      deleteCardFromList(cardElement);
+      deleteCardFromList(deleteCardContext.cardElement);
     })
     .catch((err) => {
       openError(err.message);
     });
+}
+
+function confirmDeleteCard(id, cardElement) {
+  deleteCardContext.cardId = id;
+  deleteCardContext.cardElement = cardElement;
+  openModal(confirmationModal);
 }
 
 // функция-обработчик нажатия на кнопку лайк
@@ -221,7 +242,6 @@ const userPromise = getUser();
 const cardsPromise = getCards();
 Promise.all([userPromise, cardsPromise])
   .then((responses) => {
-    console.log(responses);
     const userInfo = responses[0];
     updateUserInfo(userInfo);
 
@@ -231,7 +251,7 @@ Promise.all([userPromise, cardsPromise])
         listItemTemplate,
         card,
         userInfo._id,
-        deleteCard,
+        confirmDeleteCard,
         likeCard,
         openImage
       );
