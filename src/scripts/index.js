@@ -31,22 +31,25 @@ const errorModal = document.querySelector(".popup_error");
 const profileEditImage = document.querySelector(".profile__image");
 const newAvatarModal = document.querySelector(".popup_type_new-avatar");
 
-const editProfileForm = document.querySelector(".popup__form[name='edit-profile']");
 const profileTitleElement = document.querySelector(".profile__title");
 const profileDescriptionElement = document.querySelector(".profile__description");
 const profileImageElement = document.querySelector(".profile__image");
-const nameInput = document.querySelector(".popup__input_type_name");
-const jobInput = document.querySelector(".popup__input_type_description");
+const editProfileForm = document.querySelector(".popup__form[name='edit-profile']");
+const nameInput = editProfileForm.querySelector(".popup__input_type_name");
+const jobInput = editProfileForm.querySelector(".popup__input_type_description");
+const editProfileSubmitButton = editProfileForm.querySelector(".popup__button");
 
 const newPlaceForm = document.querySelector(".popup__form[name='new-place']");
 const cardNameInput = newPlaceForm.querySelector(".popup__input_type_card-name");
 const typeUrlInput = newPlaceForm.querySelector(".popup__input_type_url");
+const newPlaceFormSubmitButton = newPlaceForm.querySelector(".popup__button");
 
 const imageModalImageElement = imageModal.querySelector(".popup__image");
 const imageModalCaptionElement = imageModal.querySelector(".popup__caption");
 
 const newAvatarForm = newAvatarModal.querySelector(".popup__form");
 const avatarUrlInput = newAvatarForm.querySelector(".popup__input_type_url");
+const newAvatarFormSubmitButton = newAvatarForm.querySelector(".popup__button");
 
 const errorCaptionElement = errorModal.querySelector(".popup__text");
 
@@ -60,6 +63,8 @@ const validationConfig = {
 
 function handleEditProfileFormSubmit(evt) {
   evt.preventDefault();
+  setButtonTextLoading(editProfileSubmitButton);
+
   // вызываем обновление данных о пользователе на сервере
   updateUser({
     name: nameInput.value,
@@ -68,14 +73,17 @@ function handleEditProfileFormSubmit(evt) {
     .then((userInfo) => {
       updateUserInfo(userInfo);
       closeModal(profileModal);
+      setNormalButtonText(editProfileSubmitButton);
     })
     .catch((err) => {
       openError(err.message);
+      setNormalButtonText(editProfileSubmitButton);
     });
 }
 
 function handleNewPlaceFormSubmit(evt) {
   evt.preventDefault();
+  setButtonTextLoading(newPlaceFormSubmitButton);
   const card = {
     name: cardNameInput.value,
     link: typeUrlInput.value,
@@ -95,9 +103,11 @@ function handleNewPlaceFormSubmit(evt) {
       initialCardsList.prepend(el);
       closeModal(newCardModal);
       newPlaceForm.reset();
+      setNormalButtonText(newPlaceFormSubmitButton);
     })
     .catch((err) => {
       openError(err.message);
+      setNormalButtonText(newPlaceFormSubmitButton);
     });
 }
 
@@ -106,6 +116,7 @@ function handleNewAvatarFormSubmit(evt) {
   const avatar = {
     avatar: avatarUrlInput.value,
   };
+  setButtonTextLoading(newAvatarFormSubmitButton);
 
   // обновляем аватар на сервере
   updateAvatar(avatar)
@@ -113,10 +124,20 @@ function handleNewAvatarFormSubmit(evt) {
       updateUserInfo(userInfo);
       closeModal(newAvatarModal);
       newAvatarForm.reset();
+      setNormalButtonText(newAvatarFormSubmitButton);
     })
     .catch((err) => {
       openError(err.message);
+      setNormalButtonText(newAvatarFormSubmitButton);
     });
+}
+
+function setNormalButtonText(buttonElement) {
+  buttonElement.value = "Сохранить";
+}
+
+function setButtonTextLoading(buttonElement) {
+  buttonElement.textContent = "Сохранение...";
 }
 
 function openImage(card) {
