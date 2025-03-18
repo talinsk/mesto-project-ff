@@ -3,6 +3,7 @@ const likeActiveClass = "card__like-button_is-active";
 export function createCard(
   listItemTemplate,
   card,
+  currentUserId,
   funcDeleteCard,
   funcLikeCard,
   funcOpenImage
@@ -14,17 +15,27 @@ export function createCard(
   cardImage.addEventListener("click", () => funcOpenImage(card));
   cardElement.querySelector(".card__title").textContent = card.name;
 
-  cardElement
-    .querySelector(".card__delete-button")
-    .addEventListener("click", () => funcDeleteCard(cardElement));
+  const deleteButtonElement = cardElement.querySelector(".card__delete-button");
+  if (card.owner._id === currentUserId) {
+    deleteButtonElement.classList.add("card__delete-button_visible");
+    deleteButtonElement.addEventListener("click", () => funcDeleteCard(card._id, cardElement));
+  }
 
   const likeButton = cardElement.querySelector(".card__like-button");
   likeButton.addEventListener("click", () => funcLikeCard(likeButton));
 
+  const likeCounter = cardElement.querySelector(".card__like-count");
+  likeCounter.textContent = card.likes.length;
+
+  const user = card.likes.find((item) => item._id === currentUserId);
+  if (user) {
+    likeButton.classList.add(likeActiveClass);
+  }
+
   return cardElement;
 }
 
-export function deleteCard(cardElement) {
+export function deleteCardFromList(cardElement) {
   cardElement.remove();
 }
 

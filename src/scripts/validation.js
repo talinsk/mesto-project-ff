@@ -19,7 +19,7 @@ export function clearValidation(popupElement, validationConfig) {
   );
 
   inputList.forEach((inputElement) => {
-    hideInputError(formElement, inputElement);
+    hideInputError(formElement, inputElement, validationConfig.inputErrorClass);
   });
 
   const buttonElement = formElement.querySelector(
