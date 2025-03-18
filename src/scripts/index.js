@@ -188,19 +188,21 @@ profileEditImage.addEventListener("click", function () {
 
 confirmationButton.addEventListener("click", function () {
   deleteCard();
-  closeModal(confirmationModal);
 });
 
 function deleteCard() {  
   if (!deleteCardContext.cardId) {
+    closeModal(confirmationModal);
     return;
   }
 
   deleteCardFromServer(deleteCardContext.cardId)
     .then(() => {
+      closeModal(confirmationModal);
       deleteCardFromList(deleteCardContext.cardElement);
     })
     .catch((err) => {
+      closeModal(confirmationModal);
       openError(err.message);
     });
 }
