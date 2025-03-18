@@ -1,4 +1,10 @@
-const likeActiveClass = "card__like-button_is-active";
+export const likeActiveClass = "card__like-button_is-active";
+const deleteButtonVisibleClass = "card__delete-button_visible";
+
+const cardTitleSelector = ".card__title";
+const cardDeleteButtonSelector = ".card__delete-button";
+const cardLikeButtonSelector = ".card__like-button";
+const cardLikeCounterSelector = ".card__like-count";
 
 export function createCard(
   listItemTemplate,
@@ -13,18 +19,18 @@ export function createCard(
   cardImage.src = card.link;
   cardImage.alt = card.name;
   cardImage.addEventListener("click", () => funcOpenImage(card));
-  cardElement.querySelector(".card__title").textContent = card.name;
+  cardElement.querySelector(cardTitleSelector).textContent = card.name;
 
-  const deleteButtonElement = cardElement.querySelector(".card__delete-button");
+  const deleteButtonElement = cardElement.querySelector(cardDeleteButtonSelector);
   if (card.owner._id === currentUserId) {
-    deleteButtonElement.classList.add("card__delete-button_visible");
+    deleteButtonElement.classList.add(deleteButtonVisibleClass);
     deleteButtonElement.addEventListener("click", () => funcDeleteCard(card._id, cardElement));
   }
 
   // элемент кнопки "лайк"
-  const likeButton = cardElement.querySelector(".card__like-button");
+  const likeButton = cardElement.querySelector(cardLikeButtonSelector);
   // элемент счетчика лайков
-  const likeCounter = cardElement.querySelector(".card__like-count");
+  const likeCounter = cardElement.querySelector(cardLikeCounterSelector);
   likeButton.addEventListener("click", () => funcLikeCard(card._id, likeButton, likeCounter));  
   
   setCounterValue(likeCounter, card.likes.length);

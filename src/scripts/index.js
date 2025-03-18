@@ -4,6 +4,7 @@ import {
   deleteCardFromList,
   toggleLike,
   setCounterValue,
+  likeActiveClass
 } from "./card";
 import { openModal, closeModal } from "./modal";
 import { enableFormValidation, clearValidation } from "./validation";
@@ -56,6 +57,9 @@ const confirmationButton = confirmationModal.querySelector(".popup__button");
 
 const errorCaptionElement = errorModal.querySelector(".popup__text");
 
+const buttonLoadingText = "Сохранение...";
+const buttonNormalText = "Сохранить";
+
 const deleteCardContext = {
   cardId: null,
   cardElement: null
@@ -71,7 +75,7 @@ const validationConfig = {
 
 function handleEditProfileFormSubmit(evt) {
   evt.preventDefault();
-  setButtonTextLoading(editProfileSubmitButton);
+  setButtonText(editProfileSubmitButton, buttonLoadingText);
 
   // вызываем обновление данных о пользователе на сервере
   updateUser({
@@ -81,17 +85,17 @@ function handleEditProfileFormSubmit(evt) {
     .then((userInfo) => {
       updateUserInfo(userInfo);
       closeModal(profileModal);
-      setNormalButtonText(editProfileSubmitButton);
+      setButtonText(editProfileSubmitButton, buttonNormalText);
     })
     .catch((err) => {
       openError(err.message);
-      setNormalButtonText(editProfileSubmitButton);
+      setButtonText(editProfileSubmitButton, buttonNormalText);
     });
 }
 
 function handleNewPlaceFormSubmit(evt) {
   evt.preventDefault();
-  setButtonTextLoading(newPlaceFormSubmitButton);
+  setButtonText(newPlaceFormSubmitButton, buttonLoadingText);
   const card = {
     name: cardNameInput.value,
     link: typeUrlInput.value,
@@ -111,11 +115,11 @@ function handleNewPlaceFormSubmit(evt) {
       initialCardsList.prepend(el);
       closeModal(newCardModal);
       newPlaceForm.reset();
-      setNormalButtonText(newPlaceFormSubmitButton);
+      setButtonText(newPlaceFormSubmitButton, buttonNormalText);
     })
     .catch((err) => {
       openError(err.message);
-      setNormalButtonText(newPlaceFormSubmitButton);
+      setButtonText(newPlaceFormSubmitButton, buttonNormalText);
     });
 }
 
@@ -124,7 +128,7 @@ function handleNewAvatarFormSubmit(evt) {
   const avatar = {
     avatar: avatarUrlInput.value,
   };
-  setButtonTextLoading(newAvatarFormSubmitButton);
+  setButtonText(newAvatarFormSubmitButton, buttonLoadingText);
 
   // обновляем аватар на сервере
   updateAvatar(avatar)
@@ -132,20 +136,16 @@ function handleNewAvatarFormSubmit(evt) {
       updateUserInfo(userInfo);
       closeModal(newAvatarModal);
       newAvatarForm.reset();
-      setNormalButtonText(newAvatarFormSubmitButton);
+      setButtonText(newAvatarFormSubmitButton, buttonNormalText);
     })
     .catch((err) => {
       openError(err.message);
-      setNormalButtonText(newAvatarFormSubmitButton);
+      setButtonText(newAvatarFormSubmitButton, buttonNormalText);
     });
 }
 
-function setNormalButtonText(buttonElement) {
-  buttonElement.textContent = "Сохранить";
-}
-
-function setButtonTextLoading(buttonElement) {
-  buttonElement.textContent = "Сохранение...";
+function setButtonText(buttonElement, text) {
+  buttonElement.textContent = text;
 }
 
 function openImage(card) {
@@ -213,7 +213,7 @@ function confirmDeleteCard(id, cardElement) {
 
 // функция-обработчик нажатия на кнопку лайк
 function likeCard(cardId, likeButton, likeCounterElement) {
-  const promise = likeButton.classList.contains("card__like-button_is-active")
+  const promise = likeButton.classList.contains(likeActiveClass)
     ? deleteLike(cardId)
     : putLike(cardId);
 
