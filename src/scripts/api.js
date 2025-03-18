@@ -10,7 +10,7 @@ const config = {
 export const getUser = () => {
   return fetch(`${config.baseUrl}/users/me`, {
     headers: config.headers,
-  }).then(res => {
+  }).then((res) => {
     if (res.ok) {
       return res.json();
     }
@@ -23,7 +23,22 @@ export const getUser = () => {
 export const getCards = () => {
   return fetch(`${config.baseUrl}/cards`, {
     headers: config.headers,
-  }).then(res => {
+  }).then((res) => {
+    if (res.ok) {
+      return res.json();
+    }
+
+    return handleErrorResponse(res);
+  });
+};
+
+// функция обновления автара
+export const updateAvatar = (avatar) => {
+  return fetch(`${config.baseUrl}/users/me/avatar`, {
+    method: "PATCH",
+    headers: config.headers,
+    body: JSON.stringify(avatar),
+  }).then((res) => {
     if (res.ok) {
       return res.json();
     }
@@ -37,8 +52,8 @@ export const updateUser = (userInfo) => {
   return fetch(`${config.baseUrl}/users/me`, {
     method: "PATCH",
     headers: config.headers,
-    body: JSON.stringify(userInfo)
-  }).then(res => {
+    body: JSON.stringify(userInfo),
+  }).then((res) => {
     if (res.ok) {
       return res.json();
     }
@@ -48,45 +63,82 @@ export const updateUser = (userInfo) => {
 };
 
 // функция добавления новой карточки
+export const addNewCard = (objCard) => {
+  return fetch(`${config.baseUrl}/cards`, {
+    method: "POST",
+    headers: config.headers,
+    body: JSON.stringify(objCard),
+  }).then((res) => {
+    if (res.ok) {
+      return res.json();
+    }
 
+    return handleErrorResponse(res);
+  });
+};
 
 // функция удаления карточки
 export const deleteCard = (cardId) => {
   return fetch(`${config.baseUrl}/cards/${cardId}`, {
     method: "DELETE",
     headers: config.headers,
-  }).then(res => {
+  }).then((res) => {
     if (!res.ok) {
-      return handleErrorResponse(res);  
+      return handleErrorResponse(res);
     }
   });
 };
 
+// функция постановки лайка
+export const putLike = (cardId) => {
+  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
+    method: "PUT",
+    headers: config.headers,
+  }).then((res) => {
+    if (res.ok) {
+      return res.json();
+    }
+
+    return handleErrorResponse(res);
+  });
+};
+
+// функция снятия лайка deleteLike
+export const deleteLike = (cardId) => {
+  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
+    method: "DELETE",
+    headers: config.headers,
+  }).then((res) => {
+    if (res.ok) {
+      return res.json();
+    }
+
+    return handleErrorResponse(res);
+  });
+};
 
 // функции обработки ошибок
 // функция генерации ошибки, параметры: код статуса ответа и текст ошибки
 const throwError = (status, errorMessage) => {
   throw new Error(`Код статуса: ${status}. Ошибка: ${errorMessage}`);
-}
+};
 
 // функция обработки ответа от сервера
 const handleErrorResponse = (res) => {
-  if (res.headers.get('Content-Type').includes('application/json')) {
+  if (res.headers.get("Content-Type").includes("application/json")) {
     // если сервер возвращает json
-    return res.json().then(json => {      
+    return res.json().then((json) => {
       // проверяем, есть ли поле message, возвращаем его
-      if (json.message) {        
+      if (json.message) {
         throwError(res.status, json.message);
-      }
-      else {
+      } else {
         // если поля message нет, то возвращаем весь json
         throwError(res.status, JSON.stringify(json));
-      }      
+      }
     });
-  }
-  else {
+  } else {
     // если не json, то возвращаем текст в качестве ошибки
-    return res.text().then(text => {      
+    return res.text().then((text) => {
       throwError(res.status, text);
     });
   }

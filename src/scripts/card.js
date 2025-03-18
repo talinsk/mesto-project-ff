@@ -21,11 +21,13 @@ export function createCard(
     deleteButtonElement.addEventListener("click", () => funcDeleteCard(card._id, cardElement));
   }
 
+  // элемент кнопки "лайк"
   const likeButton = cardElement.querySelector(".card__like-button");
-  likeButton.addEventListener("click", () => funcLikeCard(likeButton));
-
+  // элемент счетчика лайков
   const likeCounter = cardElement.querySelector(".card__like-count");
-  likeCounter.textContent = card.likes.length;
+  likeButton.addEventListener("click", () => funcLikeCard(card._id, likeButton, likeCounter));  
+  
+  setCounterValue(likeCounter, card.likes.length);
 
   const user = card.likes.find((item) => item._id === currentUserId);
   if (user) {
@@ -41,4 +43,9 @@ export function deleteCardFromList(cardElement) {
 
 export function toggleLike(likeButton) {
   likeButton.classList.toggle(likeActiveClass);
+}
+
+// функция для установки значения количества лайков
+export function setCounterValue(likeCounterElement, likesCount) {
+  likeCounterElement.textContent = likesCount;
 }
