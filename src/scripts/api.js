@@ -11,11 +11,7 @@ export const getUser = () => {
   return fetch(`${config.baseUrl}/users/me`, {
     headers: config.headers,
   }).then((res) => {
-    if (res.ok) {
-      return res.json();
-    }
-
-    return handleErrorResponse(res);
+    return handleResponse(res);
   });
 };
 
@@ -24,11 +20,7 @@ export const getCards = () => {
   return fetch(`${config.baseUrl}/cards`, {
     headers: config.headers,
   }).then((res) => {
-    if (res.ok) {
-      return res.json();
-    }
-
-    return handleErrorResponse(res);
+    return handleResponse(res);
   });
 };
 
@@ -39,11 +31,7 @@ export const updateAvatar = (avatar) => {
     headers: config.headers,
     body: JSON.stringify(avatar),
   }).then((res) => {
-    if (res.ok) {
-      return res.json();
-    }
-
-    return handleErrorResponse(res);
+    return handleResponse(res);
   });
 };
 
@@ -54,11 +42,7 @@ export const updateUser = (userInfo) => {
     headers: config.headers,
     body: JSON.stringify(userInfo),
   }).then((res) => {
-    if (res.ok) {
-      return res.json();
-    }
-
-    return handleErrorResponse(res);
+    return handleResponse(res);
   });
 };
 
@@ -69,11 +53,7 @@ export const addNewCard = (objCard) => {
     headers: config.headers,
     body: JSON.stringify(objCard),
   }).then((res) => {
-    if (res.ok) {
-      return res.json();
-    }
-
-    return handleErrorResponse(res);
+    return handleResponse(res);
   });
 };
 
@@ -95,11 +75,7 @@ export const putLike = (cardId) => {
     method: "PUT",
     headers: config.headers,
   }).then((res) => {
-    if (res.ok) {
-      return res.json();
-    }
-
-    return handleErrorResponse(res);
+    return handleResponse(res);
   });
 };
 
@@ -109,13 +85,18 @@ export const deleteLike = (cardId) => {
     method: "DELETE",
     headers: config.headers,
   }).then((res) => {
-    if (res.ok) {
-      return res.json();
-    }
-
-    return handleErrorResponse(res);
+    return handleResponse(res);
   });
 };
+
+// функция оработки ответа от сервера
+const handleResponse = (response) => {
+  if (response.ok) {
+    return response.json();
+  }
+
+  return handleErrorResponse(response);
+}
 
 // функции обработки ошибок
 // функция генерации ошибки, параметры: код статуса ответа и текст ошибки

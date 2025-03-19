@@ -12,6 +12,8 @@ export function openModal(modalElement) {
 
 export function closeModal(modalElement) {
   modalElement.classList.remove(popupOpenedClass);
+  modalElement.removeEventListener("click", closeModalByOverlayClick);
+  modalElement.querySelector(popupCloseSelector).removeEventListener("click", closeModalByButton);
   document.removeEventListener("keydown", closeModalByEsc);
 }
 
@@ -25,12 +27,12 @@ function closeModalByEsc(e) {
 }
 
 function closeModalByOverlayClick(e) {
-  const modal = document.querySelector(popupOpenedSelector);
+  const modal = e.currentTarget;
   if (modal && e.target === modal) {
     closeModal(modal);
   }
 }
 
 function closeModalByButton(e) {
-    closeModal(e.target.closest(popupSelector));
+  closeModal(e.target.closest(popupSelector));
 }

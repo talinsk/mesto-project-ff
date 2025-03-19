@@ -85,10 +85,11 @@ function handleEditProfileFormSubmit(evt) {
     .then((userInfo) => {
       updateUserInfo(userInfo);
       closeModal(profileModal);
-      setButtonText(editProfileSubmitButton, buttonNormalText);
     })
     .catch((err) => {
       openError(err.message);
+    })
+    .finally(() => {
       setButtonText(editProfileSubmitButton, buttonNormalText);
     });
 }
@@ -115,10 +116,11 @@ function handleNewPlaceFormSubmit(evt) {
       initialCardsList.prepend(el);
       closeModal(newCardModal);
       newPlaceForm.reset();
-      setButtonText(newPlaceFormSubmitButton, buttonNormalText);
     })
     .catch((err) => {
       openError(err.message);
+    })
+    .finally(() => {
       setButtonText(newPlaceFormSubmitButton, buttonNormalText);
     });
 }
@@ -136,10 +138,11 @@ function handleNewAvatarFormSubmit(evt) {
       updateUserInfo(userInfo);
       closeModal(newAvatarModal);
       newAvatarForm.reset();
-      setButtonText(newAvatarFormSubmitButton, buttonNormalText);
     })
     .catch((err) => {
       openError(err.message);
+    })
+    .finally(() => {
       setButtonText(newAvatarFormSubmitButton, buttonNormalText);
     });
 }
@@ -243,11 +246,9 @@ enableFormValidation(validationConfig);
 const userPromise = getUser();
 const cardsPromise = getCards();
 Promise.all([userPromise, cardsPromise])
-  .then((responses) => {
-    const userInfo = responses[0];
+  .then(([userInfo, cards]) => {
     updateUserInfo(userInfo);
 
-    const cards = responses[1];
     cards.forEach((card) => {
       const el = createCard(
         listItemTemplate,

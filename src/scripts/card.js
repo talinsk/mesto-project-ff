@@ -35,8 +35,8 @@ export function createCard(
   
   setCounterValue(likeCounter, card.likes.length);
 
-  const user = card.likes.find((item) => item._id === currentUserId);
-  if (user) {
+  const isLikedByCurrentUser = card.likes.some((item) => item._id === currentUserId);
+  if (isLikedByCurrentUser) {
     likeButton.classList.add(likeActiveClass);
   }
 
